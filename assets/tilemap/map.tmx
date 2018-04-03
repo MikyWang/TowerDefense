@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="50" height="20" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="50" height="20" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1">
  <tileset firstgid="1" name="map" tilewidth="32" tileheight="32" tilecount="150" columns="15">
   <image source="map.jpg" width="480" height="320"/>
   <terraintypes>
@@ -19,9 +19,17 @@
     </properties>
    </terrain>
   </terraintypes>
-  <tile id="42" terrain="2,2,2,2"/>
+  <tile id="42" terrain="2,2,2,2">
+   <properties>
+    <property name="type" value="ground"/>
+   </properties>
+  </tile>
   <tile id="54" terrain="1,1,1,1"/>
-  <tile id="97" terrain="0,0,0,0"/>
+  <tile id="97" terrain="0,0,0,0">
+   <properties>
+    <property name="type" value="meadow"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="BackGround" width="50" height="20">
   <data encoding="base64">
