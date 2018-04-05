@@ -23,3 +23,11 @@ export default class CommonHelper extends cc.Component {
         return type[eWord].toString().toLowerCase();
     }
 }
+
+export enum MonsterState {
+    Front,
+    Back,
+    Left,
+    Right,
+    None
+}

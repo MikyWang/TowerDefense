@@ -6,8 +6,7 @@ const { ccclass, property } = cc._decorator;
 export default class Session extends cc.Component {
 
     private static game: Game = null;
-    private static gameNode = 'game/map';
-
+    private static readonly gameNode = 'game/map';
 
     onload() {
         cc.game.addPersistRootNode(this.node);

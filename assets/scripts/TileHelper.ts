@@ -6,6 +6,8 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class TileHelper extends cc.Component {
 
+    static readonly MonsterTileType: string = 'ground';
+
     static getTilePos(position: cc.Vec2): cc.Vec2 {
         let game = Session.currentGameInstance();
         let mapSize = game.map.node.getContentSize();
