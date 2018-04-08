@@ -1,4 +1,5 @@
 import { TouchKeeper } from "./TouchKeeper";
+import Camera from "./Camera";
 
 const { ccclass, property } = cc._decorator;
 
@@ -13,48 +14,70 @@ export default class Game extends cc.Component {
     monsterGroundLayer: cc.TiledLayer = null;
     @property(cc.Vec2)
     MonsterEnd: cc.Vec2 = null;
+    @property(cc.Node)
+    cameraNode: cc.Node = null;
 
-    private twoFingerTouchs: TouchKeeper[] = new Array<TouchKeeper>();
+    private fingerTouchs: TouchKeeper[] = new Array<TouchKeeper>();
+    private touchCount: number = 0;
 
     start() {
         this.addTouchEventListening();
     }
 
-    private towFingerTouchStartHandler(touchs: cc.Event.EventTouch[]) {
-        this.twoFingerTouchs.splice(0, this.twoFingerTouchs.length);
-        touchs.forEach(touch => {
-            let touchKeeper = new TouchKeeper(touch.getID(), touch.getLocation());
-            this.twoFingerTouchs.push(touchKeeper);
-        });
+    private TwoFingersHandler() {
+        let leftFinger: TouchKeeper = null;
+        let rightFinger: TouchKeeper = null;
+        if (this.fingerTouchs[0].startPosition.x == this.fingerTouchs[1].startPosition.x) {
+            leftFinger = this.fingerTouchs[0].startPosition.y > this.fingerTouchs[1].startPosition.y ? this.fingerTouchs[0] : this.fingerTouchs[1];
+            rightFinger = this.fingerTouchs[0].startPosition.y < this.fingerTouchs[1].startPosition.y ? this.fingerTouchs[0] : this.fingerTouchs[1];
+        }
+        else {
+            leftFinger = this.fingerTouchs[0].startPosition.x < this.fingerTouchs[1].startPosition.x ? this.fingerTouchs[0] : this.fingerTouchs[1];
+            rightFinger = this.fingerTouchs[0].startPosition.x > this.fingerTouchs[1].startPosition.x ? this.fingerTouchs[0] : this.fingerTouchs[1];
+        }
+        let leftDelta = leftFinger.calculateDelta();
+        let rightDelta = rightFinger.calculateDelta();
+        let camera = this.cameraNode.getComponent(Camera);
+        camera.scaling(leftDelta, rightDelta);
+
     }
 
-    private towFingerTouchEndHandler(touchs: cc.Event.EventTouch[]) {
-        if (this.twoFingerTouchs.length < 1) return;
-        touchs.forEach(touch => {
-            this.twoFingerTouchs.forEach(touchKeeper => {
-                if (touchKeeper.touchID == touch.getID()) {
-                    touchKeeper.EndPosition = touch.getLocation();
-                }
-            });
-        });
+    private TouchStartHandler(event: cc.Event.EventTouch) {
+        this.touchCount++;
+        let touchKeeper = new TouchKeeper(event.getID(), event.getLocation());
+        this.fingerTouchs.push(touchKeeper);
+    }
 
+    private TouchEndHandler(event: cc.Event.EventTouch) {
+        this.fingerTouchs.forEach(touchKeeper => {
+            if (touchKeeper.touchID == event.getID()) {
+                touchKeeper.EndPosition = event.getLocation();
+            }
+        });
+        this.touchCount--;
+        cc.log("count:" + this.touchCount);
+        if (this.touchCount == 0 && this.fingerTouchs.length > 0) {
+            cc.log("length:" + this.fingerTouchs.length);
+            switch (this.fingerTouchs.length) {
+                case 1:
+                    break;
+                case 2:
+                    this.TwoFingersHandler();
+                    break;
+            }
+            this.fingerTouchs.splice(0, this.fingerTouchs.length);
+        }
     }
 
     addTouchEventListening() {
         this.node.on(cc.Node.EventType.TOUCH_START, event => {
             if (event instanceof cc.Event.EventTouch) {
-                let touchs = event.getTouches() as cc.Event.EventTouch[];
-                if (touchs.length == 2) {
-                    this.towFingerTouchStartHandler(touchs);
-                }
+                this.TouchStartHandler(event);
             }
         });
         this.node.on(cc.Node.EventType.TOUCH_END, event => {
             if (event instanceof cc.Event.EventTouch) {
-                let touchs = event.getTouches() as cc.Event.EventTouch[];
-                if (touchs.length == 2) {
-                    this.towFingerTouchEndHandler(touchs);
-                }
+                this.TouchEndHandler(event);
             }
         });
     }
