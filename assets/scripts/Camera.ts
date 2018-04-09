@@ -11,10 +11,7 @@ export default class Camera extends cc.Component {
 
     start() {
         this.cameraNode = this.node.getComponent(cc.Camera);
-        this.node.setPosition(this.playerNode.position);
-    }
-
-    update(dt: number) {
+        // this.node.setPosition(this.playerNode.position);
     }
 
     scaling(leftDelta: cc.Vec2, rightDelta: cc.Vec2) {

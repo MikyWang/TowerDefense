@@ -46,7 +46,7 @@ export default class Monster extends cc.Component {
                 break;
         }
         if (value != MonsterState.None) {
-            this.movePosition = this.game.monsterGroundLayer.getPositionAt(this.tilePosition);
+            this.movePosition = this.game.backGroundLayer.getPositionAt(this.tilePosition);
             let aniName = CommonHelper.getEnumName(MonsterState, value);
             if (!this.animation.getAnimationState(aniName).isPlaying) {
                 this.animation.play(aniName);
@@ -99,7 +99,7 @@ export default class Monster extends cc.Component {
     }
 
     isValidPath(tile: cc.Vec2): boolean {
-        let type = TileHelper.getTileType(this.game.monsterGroundLayer, tile);
+        let type = TileHelper.getTileType(this.game.backGroundLayer, tile);
         return type == TileHelper.MonsterTileType && !this.preTile.equals(tile);
     }
 }

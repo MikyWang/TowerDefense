@@ -10,8 +10,6 @@ export default class Game extends cc.Component {
     map: cc.TiledMap = null;
     @property(cc.TiledLayer)
     backGroundLayer: cc.TiledLayer = null;
-    @property(cc.TiledLayer)
-    monsterGroundLayer: cc.TiledLayer = null;
     @property(cc.Vec2)
     MonsterEnd: cc.Vec2 = null;
     @property(cc.Node)
@@ -55,9 +53,7 @@ export default class Game extends cc.Component {
             }
         });
         this.touchCount--;
-        cc.log("count:" + this.touchCount);
         if (this.touchCount == 0 && this.fingerTouchs.length > 0) {
-            cc.log("length:" + this.fingerTouchs.length);
             switch (this.fingerTouchs.length) {
                 case 1:
                     break;
