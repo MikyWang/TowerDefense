@@ -2,6 +2,7 @@ import CommonHelper, { MonsterState } from "./CommonHelper";
 import Session from "./Session";
 import Game from "./Game";
 import TileHelper from "./TileHelper";
+import AutoPath from "./AutoPath";
 
 const { ccclass, property } = cc._decorator;
 
@@ -18,7 +19,9 @@ export default class Monster extends cc.Component {
     private moveState: MonsterState = MonsterState.None;
     private game: Game = null;
     private currentAction: cc.Action = null;
-    private preTile: cc.Vec2 = null;
+    private openPath: AutoPath[] = [];
+    private closedPath: AutoPath[] = [];
+    private minPath: AutoPath[] = [];
 
     tilePosition: cc.Vec2 = null;
     movePosition: cc.Vec2 = null;
@@ -29,22 +32,7 @@ export default class Monster extends cc.Component {
     }
 
     public set MoveState(value: MonsterState) {
-        this.preTile = CommonHelper.shallowCopy(cc.Vec2, this.tilePosition);
         this.moveState = value;
-        switch (value) {
-            case MonsterState.Front:
-                this.tilePosition.y++;
-                break;
-            case MonsterState.Back:
-                this.tilePosition.y--;
-                break;
-            case MonsterState.Left:
-                this.tilePosition.x--;
-                break;
-            case MonsterState.Right:
-                this.tilePosition.x++;
-                break;
-        }
         if (value != MonsterState.None) {
             this.movePosition = this.game.backGroundLayer.getPositionAt(this.tilePosition);
             let aniName = CommonHelper.getEnumName(MonsterState, value);
@@ -56,8 +44,8 @@ export default class Monster extends cc.Component {
     }
 
     update(dt: number) {
-        if (this.MoveState == MonsterState.None) {
-            this.MoveState = this.calculateNextStep(this.tilePosition);
+        if (this.MoveState == MonsterState.None && this.minPath.length > 0) {
+            this.MoveState = this.calculateNextStep(this.minPath.pop().tilePosition);
         }
     }
 
@@ -65,7 +53,56 @@ export default class Monster extends cc.Component {
         this.game = Session.currentGameInstance();
         this.animation = this.node.getComponent(cc.Animation);
         this.tilePosition = TileHelper.getTilePos(this.node.position);
-        this.preTile = CommonHelper.shallowCopy(cc.Vec2, this.tilePosition);
+        this.openPath = [];
+        this.closedPath = [];
+        this.minPath = [];
+        let startPath = new AutoPath(CommonHelper.shallowCopy(cc.Vec2, this.tilePosition));
+        this.openPath.push(startPath);
+        let endPath = this.searchMinPath();
+        while (true) {
+            this.minPath.push(endPath);
+            if (!endPath.parentNode) break;
+            endPath = endPath.parentNode;
+        }
+    }
+
+    searchMinPath(): AutoPath {
+
+        let endPaths = this.openPath.filter(path => path.tilePosition.equals(this.game.MonsterEnd));
+
+        if (endPaths.length == 1) {
+            return endPaths.pop();
+        }
+        if (this.openPath.length > 1) {
+            this.openPath.sort((a, b) => {
+                return b.F - a.F;
+            });
+        }
+        let minPath = this.openPath.pop();
+
+        this.closedPath.push(minPath);
+        let interfacingTiles = TileHelper.getInterfacingTile(minPath.tilePosition);
+        interfacingTiles.forEach(tile => {
+            if (TileHelper.getTileType(this.game.backGroundLayer, tile) == TileHelper.MonsterTileType
+                && this.closedPath.filter(path => path.tilePosition.equals(tile)).length == 0) {
+                let existPaths = this.openPath.filter(path => path.tilePosition.equals(tile));
+                if (existPaths.length == 0) {
+                    let path = new AutoPath(tile);
+                    path.G = minPath.G + 1;
+                    path.parentNode = minPath;
+                    this.openPath.push(path);
+                }
+            }
+        });
+        this.openPath.forEach(path => {
+            let G = minPath.G + 1;
+            if (G < path.G) {
+                path.G = G;
+                path.parentNode = minPath;
+            }
+        });
+
+        return this.searchMinPath();
     }
 
     moveAction(): cc.Action {
@@ -77,29 +114,42 @@ export default class Monster extends cc.Component {
     }
 
     calculateNextStep(tile: cc.Vec2): MonsterState {
-        let endTile = this.game.MonsterEnd;
-        if (tile.x < endTile.x && this.isValidPath(cc.p(tile.x + 1, tile.y)))
-            return MonsterState.Right;
-        else if (tile.x > endTile.x && this.isValidPath(cc.p(tile.x - 1, tile.y)))
-            return MonsterState.Left;
-        else if (tile.y > endTile.y && this.isValidPath(cc.p(tile.x, tile.y - 1)))
-            return MonsterState.Back;
-        else if (tile.y < endTile.y && this.isValidPath(cc.p(tile.x, tile.y + 1)))
-            return MonsterState.Front;
-        else if (tile.x == endTile.x && tile.y == endTile.y)
-            return MonsterState.None;
-        else if (this.isValidPath(cc.p(tile.x + 1, tile.y)))
-            return MonsterState.Right;
-        else if (this.isValidPath(cc.p(tile.x - 1, tile.y)))
-            return MonsterState.Left;
-        else if (this.isValidPath(cc.p(tile.x, tile.y - 1)))
-            return MonsterState.Back;
-        else if (this.isValidPath(cc.p(tile.x, tile.y + 1)))
-            return MonsterState.Front;
+        // let endTile = this.game.MonsterEnd;
+        // if (tile.x < endTile.x && this.isValidPath(cc.p(tile.x + 1, tile.y)))
+        //     return MonsterState.Right;
+        // else if (tile.x > endTile.x && this.isValidPath(cc.p(tile.x - 1, tile.y)))
+        //     return MonsterState.Left;
+        // else if (tile.y > endTile.y && this.isValidPath(cc.p(tile.x, tile.y - 1)))
+        //     return MonsterState.Back;
+        // else if (tile.y < endTile.y && this.isValidPath(cc.p(tile.x, tile.y + 1)))
+        //     return MonsterState.Front;
+        // else if (tile.x == endTile.x && tile.y == endTile.y)
+        //     return MonsterState.None;
+        // else if (this.isValidPath(cc.p(tile.x + 1, tile.y)))
+        //     return MonsterState.Right;
+        // else if (this.isValidPath(cc.p(tile.x - 1, tile.y)))
+        //     return MonsterState.Left;
+        // else if (this.isValidPath(cc.p(tile.x, tile.y - 1)))
+        //     return MonsterState.Back;
+        // else if (this.isValidPath(cc.p(tile.x, tile.y + 1)))
+        //     return MonsterState.Front;
+        let state = null;
+        if (tile.x > this.tilePosition.x && tile.y == this.tilePosition.y)
+            state = MonsterState.Right;
+        else if (tile.x < this.tilePosition.x && tile.y == this.tilePosition.y)
+            state = MonsterState.Left;
+        else if (tile.x == this.tilePosition.x && tile.y < this.tilePosition.y)
+            state = MonsterState.Back;
+        else if (tile.x == this.tilePosition.x && tile.y > this.tilePosition.y)
+            state = MonsterState.Front;
+        else if (tile.x == this.tilePosition.x && tile.y == this.tilePosition.y)
+            state = MonsterState.None;
+        this.tilePosition = CommonHelper.shallowCopy(cc.Vec2, tile);
+        return state;
     }
 
     isValidPath(tile: cc.Vec2): boolean {
         let type = TileHelper.getTileType(this.game.backGroundLayer, tile);
-        return type == TileHelper.MonsterTileType && !this.preTile.equals(tile);
+        return type == TileHelper.MonsterTileType;
     }
 }

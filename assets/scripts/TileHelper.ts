@@ -23,4 +23,13 @@ export default class TileHelper extends cc.Component {
         let prop = game.map.getPropertiesForGID(tileGID);
         return prop ? prop.type : null;
     }
+
+    static getInterfacingTile(tile: cc.Vec2): cc.Vec2[] {
+        let tiles: cc.Vec2[] = [];
+        tiles.push(cc.p(tile.x + 1, tile.y));
+        tiles.push(cc.p(tile.x, tile.y + 1));
+        tiles.push(cc.p(tile.x - 1, tile.y));
+        tiles.push(cc.p(tile.x, tile.y - 1));
+        return tiles.filter(tile => tile.x >= 0 && tile.y >= 0);
+    }
 }
