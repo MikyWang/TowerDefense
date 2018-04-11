@@ -1,10 +1,13 @@
 import { TouchKeeper } from "./TouchKeeper";
 import Camera from "./Camera";
+import Session from "./Session";
+import TileHelper from "./TileHelper";
+import TouchListener from "./TouchListener";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class Game extends cc.Component {
+export default class Game extends TouchListener {
 
     @property(cc.TiledMap)
     map: cc.TiledMap = null;
@@ -15,14 +18,18 @@ export default class Game extends cc.Component {
     @property(cc.Node)
     cameraNode: cc.Node = null;
 
-    private fingerTouchs: TouchKeeper[] = new Array<TouchKeeper>();
-    private touchCount: number = 0;
+    private monsters: cc.Node[] = [];
 
     start() {
-        this.addTouchEventListening();
+        this.addEventListening();
     }
 
-    private TwoFingersHandler() {
+    protected oneFingerHandler() {
+        if (!Session.CurrentSelectedNode) return;
+        Session.CurrentSelectedNode.parent.emit(Session.EventType.PLAYER_MOVED, { tile: this.fingerTouchs.pop() });
+    }
+
+    protected twoFingersHandler() {
         let leftFinger: TouchKeeper = null;
         let rightFinger: TouchKeeper = null;
         if (this.fingerTouchs[0].startPosition.x == this.fingerTouchs[1].startPosition.x) {
@@ -40,41 +47,38 @@ export default class Game extends cc.Component {
 
     }
 
-    private TouchStartHandler(event: cc.Event.EventTouch) {
-        this.touchCount++;
-        let touchKeeper = new TouchKeeper(event.getID(), event.getLocation());
-        this.fingerTouchs.push(touchKeeper);
-    }
-
-    private TouchEndHandler(event: cc.Event.EventTouch) {
-        this.fingerTouchs.forEach(touchKeeper => {
-            if (touchKeeper.touchID == event.getID()) {
-                touchKeeper.EndPosition = event.getLocation();
-            }
-        });
-        this.touchCount--;
-        if (this.touchCount == 0 && this.fingerTouchs.length > 0) {
-            switch (this.fingerTouchs.length) {
-                case 1:
-                    break;
-                case 2:
-                    this.TwoFingersHandler();
-                    break;
-            }
-            this.fingerTouchs.splice(0, this.fingerTouchs.length);
-        }
-    }
-
-    addTouchEventListening() {
-        this.node.on(cc.Node.EventType.TOUCH_START, event => {
-            if (event instanceof cc.Event.EventTouch) {
-                this.TouchStartHandler(event);
-            }
-        });
-        this.node.on(cc.Node.EventType.TOUCH_END, event => {
-            if (event instanceof cc.Event.EventTouch) {
-                this.TouchEndHandler(event);
-            }
+    protected addEventListening() {
+        super.addEventListening();
+        this.node.on(Session.EventType.MONSTER_PREPARED, event => {
+            let firMonsterPrefab = Session.MonsterPrefabs.pop();
+            cc.loader.loadRes(firMonsterPrefab.url, (err, prefab) => {
+                if (err) throw err;
+                let mapSize = this.map.getMapSize();
+                this.schedule(() => {
+                    let firMonster = cc.instantiate(prefab) as cc.Node;
+                    let position = this.backGroundLayer.getPositionAt(0, 0);
+                    firMonster.setPosition(position);
+                    this.node.addChild(firMonster);
+                }, 1, 39);
+                this.schedule(() => {
+                    let firMonster = cc.instantiate(prefab) as cc.Node;
+                    let position = this.backGroundLayer.getPositionAt(0, mapSize.height - 1);
+                    firMonster.setPosition(position);
+                    this.node.addChild(firMonster);
+                }, 1, 39);
+                this.schedule(() => {
+                    let firMonster = cc.instantiate(prefab) as cc.Node;
+                    let position = this.backGroundLayer.getPositionAt(mapSize.width - 1, 0);
+                    firMonster.setPosition(position);
+                    this.node.addChild(firMonster);
+                }, 1, 39);
+                this.schedule(() => {
+                    let firMonster = cc.instantiate(prefab) as cc.Node;
+                    let position = this.backGroundLayer.getPositionAt(mapSize.width - 1, mapSize.height - 1);
+                    firMonster.setPosition(position);
+                    this.node.addChild(firMonster);
+                }, 1, 39);
+            })
         });
     }
 

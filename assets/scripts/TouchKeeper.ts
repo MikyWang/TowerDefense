@@ -1,8 +1,8 @@
 export class TouchKeeper {
 
-    readonly touchID: number;
-    readonly startPosition: cc.Vec2;
-    private endPosition: cc.Vec2;
+    readonly touchID: number = 0;
+    readonly startPosition: cc.Vec2 = null;
+    private endPosition: cc.Vec2 = null;
 
     constructor(touchID: number, startPosition: cc.Vec2) {
         this.touchID = touchID;

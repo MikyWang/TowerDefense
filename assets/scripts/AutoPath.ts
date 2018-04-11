@@ -28,6 +28,4 @@ export default class AutoPath {
         this.H = Math.abs(monsterEnd.x - tilePosition.x) + Math.abs(monsterEnd.y - tilePosition.y);
     }
 
-
-
 }

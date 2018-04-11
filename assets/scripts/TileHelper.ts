@@ -25,11 +25,17 @@ export default class TileHelper extends cc.Component {
     }
 
     static getInterfacingTile(tile: cc.Vec2): cc.Vec2[] {
+        let mapSize = Session.currentGameInstance().map.getMapSize();
         let tiles: cc.Vec2[] = [];
         tiles.push(cc.p(tile.x + 1, tile.y));
         tiles.push(cc.p(tile.x, tile.y + 1));
         tiles.push(cc.p(tile.x - 1, tile.y));
         tiles.push(cc.p(tile.x, tile.y - 1));
-        return tiles.filter(tile => tile.x >= 0 && tile.y >= 0);
+        return tiles.filter(tile => tile.x >= 0 && tile.y >= 0 && tile.x < mapSize.width && tile.y < mapSize.height);
+    }
+
+    static getActPosition(position: cc.Vec2): cc.Vec2 {
+        let cameraNode = Session.currentCameraInstance().node.getComponent(cc.Camera);
+        return cc.p(position.x / cameraNode.zoomRatio, position.y / cameraNode.zoomRatio);
     }
 }
