@@ -90,7 +90,7 @@ export default class Player extends TouchListener {
         super.addEventListening();
         this.node.on(Session.EventType.PLAYER_MOVED, ((event) => {
             let touchKeep = event.detail.tile as TouchKeeper;
-            let endTile = TileHelper.getTilePos(touchKeep.EndPosition);
+            let endTile = TileHelper.getTilePos(TileHelper.getActPosition(touchKeep.EndPosition));
             this.minPathTiles = CommonHelper.AStartSearchPath(this.tilePosition, endTile, (tile) => true);
         }).bind(this));
     }

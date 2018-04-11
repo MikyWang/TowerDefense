@@ -60,24 +60,6 @@ export default class Game extends TouchListener {
                     firMonster.setPosition(position);
                     this.node.addChild(firMonster);
                 }, 1, 39);
-                this.schedule(() => {
-                    let firMonster = cc.instantiate(prefab) as cc.Node;
-                    let position = this.backGroundLayer.getPositionAt(0, mapSize.height - 1);
-                    firMonster.setPosition(position);
-                    this.node.addChild(firMonster);
-                }, 1, 39);
-                this.schedule(() => {
-                    let firMonster = cc.instantiate(prefab) as cc.Node;
-                    let position = this.backGroundLayer.getPositionAt(mapSize.width - 1, 0);
-                    firMonster.setPosition(position);
-                    this.node.addChild(firMonster);
-                }, 1, 39);
-                this.schedule(() => {
-                    let firMonster = cc.instantiate(prefab) as cc.Node;
-                    let position = this.backGroundLayer.getPositionAt(mapSize.width - 1, mapSize.height - 1);
-                    firMonster.setPosition(position);
-                    this.node.addChild(firMonster);
-                }, 1, 39);
             })
         });
     }

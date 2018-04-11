@@ -12,7 +12,6 @@ export default class TouchListener extends cc.Component {
     protected TouchStartHandler(event: cc.Event.EventTouch) {
         this.touchCount++;
         let touchKeeper = new TouchKeeper(event.getID(), event.getLocation());
-        cc.log(touchKeeper.toString());
         this.fingerTouchs.push(touchKeeper);
     }
 
