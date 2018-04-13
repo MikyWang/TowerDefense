@@ -1,7 +1,7 @@
 import Session from "./Session";
 import Game from "./Game";
 import TileHelper from "./TileHelper";
-import { MonsterState } from "./enum";
+import { MonsterState } from "./Enum";
 import CommonHelper from "./CommonHelper";
 
 const { ccclass, property } = cc._decorator;

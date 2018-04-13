@@ -12,8 +12,8 @@ export default class TileHelper extends cc.Component {
         let game = Session.currentGameInstance();
         let mapSize = game.map.node.getContentSize();
         let tileSize = game.map.getTileSize();
-        let x = Math.floor(position.x / tileSize.width);
-        let y = Math.floor((mapSize.height - position.y) / tileSize.height) - 1;
+        let x = Math.round(position.x / tileSize.width);
+        let y = Math.round((mapSize.height - position.y) / tileSize.height) - 1;
         return cc.p(x, y);
     }
 

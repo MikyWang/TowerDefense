@@ -3,7 +3,7 @@ import Session from "./Session";
 import { TouchKeeper } from "./TouchKeeper";
 import CommonHelper from "./CommonHelper";
 import TileHelper from "./TileHelper";
-import { PlayerState } from "./enum";
+import { PlayerState } from "./Enum";
 
 const { ccclass, property } = cc._decorator;
 
@@ -83,7 +83,11 @@ export default class Player extends TouchListener {
     }
 
     protected oneFingerHandler() {
-        Session.CurrentSelectedNode = this.selectedNode;
+        if (Session.CurrentSelectedNode === this.selectedNode) {
+            Session.CurrentSelectedNode = null;
+        } else {
+            Session.CurrentSelectedNode = this.selectedNode;
+        }
     }
 
     protected addEventListening() {

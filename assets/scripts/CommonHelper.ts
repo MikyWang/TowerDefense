@@ -90,5 +90,18 @@ export default class CommonHelper extends cc.Component {
         });
         return CommonHelper.searchMinPath(openPath, closedPath, endTile, isValidPath);
     }
+
+    static getByteLength(value: string): number {
+        let length = 0;
+        for (let i = 0; i < value.length; i++) {
+            if (value.charCodeAt(i) >= 0 && value.charCodeAt(i) <= 128) {
+                length += 1;
+            } else {
+                length += 2;
+            }
+        }
+        return length;
+    }
+
 }
 

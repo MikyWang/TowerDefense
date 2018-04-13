@@ -17,6 +17,8 @@ export default class Game extends TouchListener {
     MonsterEnd: cc.Vec2 = null;
     @property(cc.Node)
     cameraNode: cc.Node = null;
+    @property(cc.Prefab)
+    tooltipPrefab: cc.Prefab = null;
 
     private monsters: cc.Node[] = [];
 
@@ -51,7 +53,7 @@ export default class Game extends TouchListener {
         super.addEventListening();
         this.node.on(Session.EventType.MONSTER_PREPARED, event => {
             let firMonsterPrefab = Session.MonsterPrefabs.pop();
-            cc.loader.loadRes(firMonsterPrefab.url, (err, prefab) => {
+            Session.loadRes(firMonsterPrefab.url, (err, prefab) => {
                 if (err) throw err;
                 let mapSize = this.map.getMapSize();
                 this.schedule(() => {
