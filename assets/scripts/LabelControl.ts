@@ -8,10 +8,10 @@ const { ccclass, property } = cc._decorator;
 export default class LabelControl extends TouchListener {
 
     @property(cc.String)
-    detail: string = '';
+    propName: string = '';
 
+    public detail: string = '';
     private initWidth: number = 0;
-
 
     protected oneFingerHandler() {
         Session.generateTooltip(this.node.convertToWorldSpace(cc.p(0, 0)), this.detail);

@@ -1,8 +1,12 @@
 {
     "name": "南小鸟",
-    "avata": "nanxiaoniao_head",
+    "avata": "sprites/nanxiaoniao_head",
     "skills": [
-        "build"
+        {
+            "name": "建造",
+            "url": "prefabs/skill_build",
+            "desc": "建造各种攻击及防御建筑"
+        }
     ],
     "properties": {
         "HP": 99999,
@@ -11,6 +15,6 @@
         "defense": 99999,
         "magicAttack": 1,
         "magicDefense": 99999,
-        "description": "可以建造各种建筑的可爱主角南小鸟"
+        "desc": "可以建造各种建筑的可爱主角南小鸟"
     }
 }

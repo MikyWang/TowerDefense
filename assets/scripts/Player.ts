@@ -4,18 +4,13 @@ import { TouchKeeper } from "./TouchKeeper";
 import CommonHelper from "./CommonHelper";
 import TileHelper from "./TileHelper";
 import { PlayerState } from "./Enum";
+import InfoPanel from "./InfoPanel";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class Player extends TouchListener {
+export default class Player extends cc.Component {
 
-    @property(cc.Node)
-    nameNode: cc.Node = null;
-    @property(cc.Node)
-    selectedNode: cc.Node = null;
-    @property(cc.Node)
-    playerNode: cc.Node = null;
     @property(cc.Float)
     duration: number = 0;
 
@@ -26,6 +21,10 @@ export default class Player extends TouchListener {
 
     state: PlayerState = PlayerState.None;
 
+    public get InfoPanel(): InfoPanel {
+        return this.getComponent(InfoPanel);
+    }
+
     update(dt: number) {
         if (this.state == PlayerState.None && this.minPathTiles.length > 0) {
             this.calculateNextStep(this.minPathTiles.pop());
@@ -33,14 +32,12 @@ export default class Player extends TouchListener {
     }
 
     start() {
-        this.selectedNode.active = false;
         this.tilePosition = TileHelper.getTilePos(this.node.position);
         this.addEventListening();
     }
 
     private calculateNextStep(tile: cc.Vec2) {
         let game = Session.currentGameInstance();
-        let animation = this.playerNode.getComponent(cc.Animation);
 
         if (tile.x > this.tilePosition.x && tile.y == this.tilePosition.y)
             this.state = PlayerState.Right;
@@ -57,9 +54,7 @@ export default class Player extends TouchListener {
         if (this.state != PlayerState.None) {
             this.movePosition = game.backGroundLayer.getPositionAt(this.tilePosition);
             let aniName = CommonHelper.getEnumName(PlayerState, this.state);
-            if (!animation.getAnimationState(aniName).isPlaying) {
-                animation.play(aniName);
-            }
+            this.InfoPanel.playAnimation(aniName);
             this.currentAction = this.node.runAction(this.moveAction());
         }
     }
@@ -72,26 +67,7 @@ export default class Player extends TouchListener {
         return cc.sequence(move, callback);
     }
 
-    protected TouchStartHandler(event: cc.Event.EventTouch) {
-        super.TouchStartHandler(event);
-        event.stopPropagation();
-    }
-
-    protected TouchEndHandler(event: cc.Event.EventTouch) {
-        super.TouchEndHandler(event);
-        event.stopPropagation();
-    }
-
-    protected oneFingerHandler() {
-        if (Session.CurrentSelectedNode === this.selectedNode) {
-            Session.CurrentSelectedNode = null;
-        } else {
-            Session.CurrentSelectedNode = this.selectedNode;
-        }
-    }
-
     protected addEventListening() {
-        super.addEventListening();
         this.node.on(Session.EventType.PLAYER_MOVED, ((event) => {
             let touchKeep = event.detail.tile as TouchKeeper;
             let endTile = TileHelper.getTilePos(TileHelper.getActPosition(touchKeep.EndPosition));
