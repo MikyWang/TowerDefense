@@ -1,0 +1,20 @@
+{
+    "name": "南小鸟",
+    "avata": "sprites/zhanshi_lv1_head",
+    "skills": [
+        {
+            "name": "建造",
+            "url": "prefabs/skill_build",
+            "desc": "建造各种攻击及防御建筑"
+        }
+    ],
+    "properties": {
+        "HP": 99999,
+        "MP": 99999,
+        "attack": 1,
+        "defense": 99999,
+        "magicAttack": 1,
+        "magicDefense": 99999,
+        "desc": "可以建造各种建筑的可爱主角南小鸟"
+    }
+}

@@ -1,4 +1,4 @@
-import { TouchKeeper } from "./TouchKeeper";
+import Attribute from "./Attribute";
 
 export interface MonsterConfig {
     name: string;
@@ -9,21 +9,11 @@ export interface PropertyConfig {
     name: string;
     avata: string;
     skills: SkillConfig[];
-    properties: PanelConfig;
+    properties: Attribute;
 }
 
 export interface SkillConfig {
     name: string;
     url: string;
-    desc: string;
-}
-
-export interface PanelConfig {
-    HP: number;
-    MP: number;
-    attack: number;
-    defense: number;
-    magicAttack: number;
-    magicDefense: number;
     desc: string;
 }

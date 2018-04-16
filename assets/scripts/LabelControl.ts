@@ -17,9 +17,9 @@ export default class LabelControl extends TouchListener {
         Session.generateTooltip(this.node.convertToWorldSpace(cc.p(0, 0)), this.detail);
     }
 
-    private set LabelString(value: string) {
+    public set LabelString(value: string) {
         let label = this.getComponent(cc.Label);
-
+        this.detail = value;
         let maxLength = Math.floor((this.initWidth / label.fontSize) * 2);
         let valueLength = CommonHelper.getByteLength(value);
         if (valueLength > maxLength) {
@@ -33,13 +33,12 @@ export default class LabelControl extends TouchListener {
         }
     }
 
-    private get LabelString(): string {
+    public get LabelString(): string {
         return this.detail;
     }
 
     start() {
         this.initWidth = this.node.width;
-        this.LabelString = this.detail;
         this.addEventListening();
     }
 
