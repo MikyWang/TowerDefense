@@ -3,6 +3,7 @@ import InfoPanel from "./InfoPanel";
 import { PropertyConfig, SkillConfig } from "./Interface";
 import LabelControl from "./LabelControl";
 import Attribute from "./Attribute";
+import SkillControl from "./SkillControl";
 
 const { ccclass, property } = cc._decorator;
 
@@ -15,6 +16,8 @@ export default class PropBar extends cc.Component {
     skillNode: cc.Node = null;
     @property(cc.Node)
     propNode: cc.Node = null;
+    @property(cc.Prefab)
+    skillPrefab: cc.Prefab = null;
 
     public static existAttribute: { [index: string]: Attribute } = {};
     public static existSkills: { [index: string]: { [index: string]: SkillConfig } } = {};
@@ -51,11 +54,9 @@ export default class PropBar extends cc.Component {
     }
 
     loadSkill(skillconfig: SkillConfig) {
-        Session.loadRes(skillconfig.url, (error, prefab) => {
-            if (error) throw error;
-            let skillPrefab = cc.instantiate(prefab);
-            this.skillNode.addChild(skillPrefab);
-        })
+        let skillNode = cc.instantiate(this.skillPrefab);
+        skillNode.getComponent(SkillControl).SkillConfig = skillconfig;
+        this.skillNode.addChild(skillNode);
     }
 
     loadProperties(properties: Attribute) {

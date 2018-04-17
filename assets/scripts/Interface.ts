@@ -1,4 +1,5 @@
 import Attribute from "./Attribute";
+import { Skilltype } from "./enum";
 
 export interface MonsterConfig {
     name: string;
@@ -16,4 +17,8 @@ export interface SkillConfig {
     name: string;
     url: string;
     desc: string;
+    baseDamage: number,
+    extraDamageRatio: number,
+    type: Skilltype;
 }
+

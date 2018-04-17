@@ -1,5 +1,7 @@
 import TouchListener from "./TouchListener";
 import Session from "./Session";
+import Skill from "./Skill";
+import Attribute from "./Attribute";
 
 const { ccclass, property } = cc._decorator;
 
@@ -14,12 +16,20 @@ export default class InfoPanel extends TouchListener {
     selectedNode: cc.Node = null;
     @property(cc.Node)
     bodyNode: cc.Node = null;
-    @property(cc.Node)
-    propBarNode: cc.Node = null;
+
+    public skills: Skill[] = [];
+    public attribute: Attribute = null;
 
     start() {
         this.selectedNode.active = false;
         this.addEventListening();
+
+    }
+
+    private loadProperties() {
+        cc.loader.load(cc.url.raw(this.configUrl), (error, data) => {
+
+        });
     }
 
     protected TouchStartHandler(event: cc.Event.EventTouch) {

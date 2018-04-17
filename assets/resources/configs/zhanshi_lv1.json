@@ -1,20 +1,20 @@
 {
-    "name": "南小鸟",
+    "name": "一级战士",
     "avata": "sprites/zhanshi_lv1_head",
     "skills": [
         {
-            "name": "建造",
-            "url": "prefabs/skill_build",
-            "desc": "建造各种攻击及防御建筑"
+            "name": "攻速光环",
+            "url": "sprites/speed_halo.png",
+            "desc": "增加周围友军5%攻速"
         }
     ],
     "properties": {
         "HP": 99999,
         "MP": 99999,
-        "attack": 1,
+        "attack": 100,
         "defense": 99999,
         "magicAttack": 1,
         "magicDefense": 99999,
-        "desc": "可以建造各种建筑的可爱主角南小鸟"
+        "desc": "一级战士"
     }
 }

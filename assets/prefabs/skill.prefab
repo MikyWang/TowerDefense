@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "skill_build",
+    "_name": "skill",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -23,9 +23,13 @@
     ],
     "_tag": -1,
     "_active": true,
-    "_components": [],
+    "_components": [
+      {
+        "__id__": 13
+      }
+    ],
     "_prefab": {
-      "__id__": 13
+      "__id__": 14
     },
     "_id": "",
     "_opacity": 255,
@@ -128,9 +132,7 @@
       "__id__": 2
     },
     "_enabled": true,
-    "_spriteFrame": {
-      "__uuid__": "121bed42-b21e-4c42-94f6-63069f7b4be3"
-    },
+    "_spriteFrame": null,
     "_type": 1,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -393,6 +395,21 @@
     },
     "fileId": "0cZd06IwVJX7mXL6Jy4ZfC",
     "sync": false
+  },
+  {
+    "__type__": "2be5f+EeqVPibgAbozkMBSD",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "skillNode": {
+      "__id__": 2
+    },
+    "nameNode": {
+      "__id__": 7
+    }
   },
   {
     "__type__": "cc.PrefabInfo",

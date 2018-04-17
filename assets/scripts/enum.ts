@@ -13,3 +13,8 @@ export enum PlayerState {
     Right,
     None
 }
+
+export enum Skilltype {
+    Physical,
+    Magic
+}
