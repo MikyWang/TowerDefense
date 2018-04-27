@@ -1,19 +1,18 @@
 {
-    "name": "一级战士",
+    "name": "lv.1 战士",
     "avata": "sprites/zhanshi_lv1_head",
     "skills": [
         {
-            "name": "攻速光环",
-            "url": "sprites/speed_halo.png",
-            "desc": "增加周围友军5%攻速"
+            "name": "建造",
+            "url": "resources/configs/skill_speedhalo.json"
         }
     ],
     "properties": {
-        "HP": 99999,
-        "MP": 99999,
+        "HP": 2000,
+        "MP": 500,
         "attack": 100,
         "defense": 99999,
-        "magicAttack": 1,
+        "magicAttack": 20,
         "magicDefense": 99999,
         "desc": "一级战士"
     }

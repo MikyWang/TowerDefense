@@ -3,12 +3,7 @@
     "avata": "sprites/nanxiaoniao_head",
     "skills": [
         {
-            "name": "建造",
-            "url": "sprites/jianzao",
-            "desc": "建造各种攻击及防御建筑",
-            "baseDamage": 0,
-            "extraDamageRatio": 0,
-            "type": "Magic"
+            "url": "resources/configs/skill_jianzao.json"
         }
     ],
     "properties": {

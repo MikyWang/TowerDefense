@@ -1,0 +1,8 @@
+{
+    "skillName": "攻速光环",
+    "textureUrl": "sprites/speed_halo",
+    "desc": "增加5%攻速",
+    "baseDamage": 0,
+    "extraDamageRatio": 0,
+    "skillType": "Magic"
+}

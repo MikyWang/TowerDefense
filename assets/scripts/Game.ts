@@ -3,6 +3,7 @@ import Camera from "./Camera";
 import Session from "./Session";
 import TileHelper from "./TileHelper";
 import TouchListener from "./TouchListener";
+import Player from "./Player";
 
 const { ccclass, property } = cc._decorator;
 
@@ -19,15 +20,29 @@ export default class Game extends TouchListener {
     cameraNode: cc.Node = null;
     @property(cc.Prefab)
     tooltipPrefab: cc.Prefab = null;
+    @property(cc.Prefab)
+    buildPrefab: cc.Prefab = null;
 
     private monsters: cc.Node[] = [];
 
     start() {
         this.addEventListening();
+        this.initPlayer();
+    }
+
+    initPlayer() {
+        let playerNode = cc.instantiate(this.buildPrefab);
+        playerNode.addComponent(Player);
+        playerNode.setPosition(cc.p(TileHelper.getTilePos(cc.p(15, 15))));
+        this.node.addChild(playerNode);
     }
 
     protected oneFingerHandler() {
         if (!Session.CurrentSelectedNode) return;
+        if (Session.buildingControl) {
+            Session.destroyBuildPanel();
+            return;
+        }
         Session.CurrentSelectedNode.parent.emit(Session.EventType.PLAYER_MOVED, { tile: this.fingerTouchs.pop() });
     }
 
@@ -63,6 +78,9 @@ export default class Game extends TouchListener {
                     this.node.addChild(firMonster);
                 }, 1, 39);
             })
+        });
+        this.node.on(Session.EventType.BUILDING_SELECTED, event => {
+
         });
     }
 

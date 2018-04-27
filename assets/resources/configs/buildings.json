@@ -1,0 +1,28 @@
+{
+    "buildings": [
+        {
+            "name": "战士",
+            "price": 100,
+            "spriteUrl": "sprites/zhanshi_lv1_head.png",
+            "configUrl": "resources/configs/zhanshi_lv1.json"
+        },
+        {
+            "name": "战士",
+            "price": 100,
+            "spriteUrl": "sprites/zhanshi_lv1_head.png",
+            "configUrl": "resources/configs/zhanshi_lv1.json"
+        },
+        {
+            "name": "战士",
+            "price": 100,
+            "spriteUrl": "sprites/zhanshi_lv1_head.png",
+            "configUrl": "resources/configs/zhanshi_lv1.json"
+        },
+        {
+            "name": "战士",
+            "price": 100,
+            "spriteUrl": "sprites/zhanshi_lv1_head.png",
+            "configUrl": "resources/configs/zhanshi_lv1.json"
+        }
+    ]
+}

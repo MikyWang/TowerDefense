@@ -18,6 +18,7 @@ export default class Player extends cc.Component {
     private movePosition: cc.Vec2 = null;
     private minPathTiles: cc.Vec2[] = [];
     private currentAction: cc.Action = null;
+    private readonly configUrl: string = 'resources/configs/player.json';
 
     state: PlayerState = PlayerState.None;
 
@@ -34,6 +35,7 @@ export default class Player extends cc.Component {
     start() {
         this.tilePosition = TileHelper.getTilePos(this.node.position);
         this.addEventListening();
+        this.InfoPanel.loadProperties(this.configUrl);
     }
 
     private calculateNextStep(tile: cc.Vec2) {

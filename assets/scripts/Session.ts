@@ -5,6 +5,7 @@ import PropBar from "./PropBar";
 import Tooltip from "./Tooltip";
 import ResRecord from "./ResRecord";
 import CommonHelper from "./CommonHelper";
+import BuildControl from "./BuildControl";
 
 const { ccclass, property } = cc._decorator;
 
@@ -17,14 +18,17 @@ export default class Session extends cc.Component {
     private static currentSelectedNode: cc.Node = null;
     private static propbar: PropBar = null;
     private static tooltip: Tooltip = null;
+    public static buildingControl: BuildControl = null;
     private static resRecords: ResRecord<any>[] = [];
 
     private static readonly cameraNode: string = 'camera';
     private static readonly tileMapNode: string = 'game/map';
     private static readonly propbarNode: string = 'game/propbar';
-    private static readonly gameNode: string = 'game';
-
     private static readonly monsterConfigFile: string = 'resources/configs/monsters.json';
+
+    public static readonly buildingConfigFile: string = 'resources/configs/buildings.json';
+    public static readonly buildingScrollUrl: string = 'prefabs/buildpanel';
+    public static readonly GameNode: string = 'game';
     /**
      * 游戏事件触发
      */
@@ -36,7 +40,15 @@ export default class Session extends cc.Component {
         /**
          * 主角移动触发
          */
-        PLAYER_MOVED: 'onPlayerMoved'
+        PLAYER_MOVED: 'onPlayerMoved',
+        /**
+         * 建造技能触发
+         */
+        SKILL_BUILD: 'build',
+        /**
+         * 建造建筑
+         */
+        BUILDING_SELECTED: 'onBuildingSelected'
     };
 
     public static set CurrentSelectedNode(value: cc.Node) {
@@ -73,6 +85,11 @@ export default class Session extends cc.Component {
         }
     }
 
+    static destroyBuildPanel() {
+        Session.buildingControl.node.destroy();
+        Session.buildingControl = null;
+    }
+
     public static get MonsterPrefabs(): MonsterConfig[] {
         if (Session.monsterPrefabs) return Session.monsterPrefabs;
     }
@@ -103,7 +120,7 @@ export default class Session extends cc.Component {
             Session.tooltip.node.destroy();
         }
         let tooltipNode = cc.instantiate(Session.currentGameInstance().tooltipPrefab);
-        let canvas = cc.find(Session.gameNode);
+        let canvas = cc.find(Session.GameNode);
         let tipPos = cc.p(position.x - canvas.x + 25, position.y - canvas.y + 50);
         tooltipNode.setPosition(tipPos);
         canvas.addChild(tooltipNode);

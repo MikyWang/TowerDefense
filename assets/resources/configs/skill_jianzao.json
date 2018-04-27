@@ -1,0 +1,9 @@
+{
+    "skillName": "build",
+    "skillCnName": "建造",
+    "textureUrl": "sprites/jianzao",
+    "desc": "建造各种攻击及防御建筑",
+    "baseDamage": 0,
+    "extraDamageRatio": 0,
+    "skillType": "Magic"
+}

@@ -15,10 +15,14 @@ export interface PropertyConfig {
 
 export interface SkillConfig {
     name: string;
+    cnName: string;
     url: string;
-    desc: string;
-    baseDamage: number,
-    extraDamageRatio: number,
-    type: Skilltype;
+}
+
+export interface BuildingConfig {
+    name: string;
+    price: number;
+    spriteUrl: string;
+    configUrl: string;
 }
 
