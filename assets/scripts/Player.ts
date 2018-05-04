@@ -11,8 +11,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Player extends cc.Component {
 
-    @property(cc.Float)
-    duration: number = 0;
+    duration: number = 0.3;
 
     private tilePosition: cc.Vec2 = null;
     private movePosition: cc.Vec2 = null;
@@ -36,6 +35,7 @@ export default class Player extends cc.Component {
         this.tilePosition = TileHelper.getTilePos(this.node.position);
         this.addEventListening();
         this.InfoPanel.loadProperties(this.configUrl);
+
     }
 
     private calculateNextStep(tile: cc.Vec2) {

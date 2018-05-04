@@ -8,7 +8,7 @@ import BuildControl from "./BuildControl";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class InfoPanel extends TouchListener {
+export default class InfoPanel extends cc.Component {
 
     @property(cc.Node)
     nameNode: cc.Node = null;
@@ -20,10 +20,11 @@ export default class InfoPanel extends TouchListener {
     public skills: Skill[] = [];
     public attribute: Attribute = null;
     public avataUrl: string;
+    public animationsUrl: string;
+    public spritesUrl: string;
 
     start() {
         this.selectedNode.active = false;
-        this.addEventListening();
     }
 
     public loadProperties(url: string) {
@@ -37,21 +38,22 @@ export default class InfoPanel extends TouchListener {
             });
             this.attribute = (data as PropertyConfig).properties;
             this.nameNode.getComponent(cc.Label).string = (data as PropertyConfig).name;
+            this.animationsUrl = (data as PropertyConfig).animationUrl;
+            this.spritesUrl = (data as PropertyConfig).spritesUrl;
         });
+        cc.loader.loadResDir(this.spritesUrl, cc.SpriteFrame, (error, altas) => {
+            let animation = this.bodyNode.addComponent(cc.Animation);
+            cc.loader.loadResDir(this.animationsUrl, (error, clips) => {
+                (clips as cc.AnimationClip[]).forEach(clip => {
+                    animation.addClip(clip);
+                });
+                this.playAnimation('front');
+            });
+        })
         this.addSkillHandler();
     }
 
-    protected TouchStartHandler(event: cc.Event.EventTouch) {
-        super.TouchStartHandler(event);
-        event.stopPropagation();
-    }
-
-    protected TouchEndHandler(event: cc.Event.EventTouch) {
-        super.TouchEndHandler(event);
-        event.stopPropagation();
-    }
-
-    protected oneFingerHandler() {
+    private oneFingerHandler() {
         if (Session.CurrentSelectedNode === this.selectedNode) {
             Session.CurrentSelectedNode = null;
         } else {

@@ -14,5 +14,7 @@
         "magicAttack": 1,
         "magicDefense": 99999,
         "desc": "可以建造各种建筑的可爱主角南小鸟"
-    }
+    },
+    "spritesUrl": "sprites/dongtiaoxi",
+    "animationUrl": "animations/nanxiaoniao"
 }

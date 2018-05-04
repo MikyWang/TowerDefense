@@ -32,8 +32,9 @@ export default class Game extends TouchListener {
 
     initPlayer() {
         let playerNode = cc.instantiate(this.buildPrefab);
-        playerNode.addComponent(Player);
-        playerNode.setPosition(cc.p(TileHelper.getTilePos(cc.p(15, 15))));
+        let player = playerNode.addComponent(Player);
+        playerNode.setPosition(cc.p(this.backGroundLayer.getPositionAt(20, 10)));
+        cc.log(playerNode.position);
         this.node.addChild(playerNode);
     }
 
@@ -65,7 +66,7 @@ export default class Game extends TouchListener {
     }
 
     protected addEventListening() {
-        super.addEventListening();
+        super.addEventListening(this.node);
         this.node.on(Session.EventType.MONSTER_PREPARED, event => {
             let firMonsterPrefab = Session.MonsterPrefabs.pop();
             Session.loadRes(firMonsterPrefab.url, (err, prefab) => {

@@ -18,8 +18,9 @@ export default class Session extends cc.Component {
     private static currentSelectedNode: cc.Node = null;
     private static propbar: PropBar = null;
     private static tooltip: Tooltip = null;
-    public static buildingControl: BuildControl = null;
     private static resRecords: ResRecord<any>[] = [];
+
+    public static buildingControl: BuildControl = null;
 
     private static readonly cameraNode: string = 'camera';
     private static readonly tileMapNode: string = 'game/map';

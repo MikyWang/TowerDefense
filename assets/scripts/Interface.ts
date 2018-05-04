@@ -11,6 +11,8 @@ export interface PropertyConfig {
     avata: string;
     skills: SkillConfig[];
     properties: Attribute;
+    animationUrl: string;
+    spritesUrl: string;
 }
 
 export interface SkillConfig {

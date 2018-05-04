@@ -41,13 +41,13 @@ export default class TouchListener extends cc.Component {
     protected twoFingersHandler() {
     }
 
-    protected addEventListening() {
-        this.node.on(cc.Node.EventType.TOUCH_START, event => {
+    protected addEventListening(node: cc.Node) {
+        node.on(cc.Node.EventType.TOUCH_START, event => {
             if (event instanceof cc.Event.EventTouch) {
                 this.TouchStartHandler(event);
             }
         });
-        this.node.on(cc.Node.EventType.TOUCH_END, event => {
+        node.on(cc.Node.EventType.TOUCH_END, event => {
             if (event instanceof cc.Event.EventTouch) {
                 this.TouchEndHandler(event);
             }
